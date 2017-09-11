@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Emit a useful diagnostic if something fails:
+bb_exit_handler() {
+    ret=$?
+    case $ret in
+    0)  ;;
+    *)  case $BASH_VERSION in
+        "") echo "WARNING: exit code $ret from a shell command.";;
+        *)  echo "WARNING: ${BASH_SOURCE[0]}:${BASH_LINENO[0]} exit $ret from '$BASH_COMMAND'";;
+        esac
+        exit $ret
+    esac
+}
+trap 'bb_exit_handler' 0
+set -e
+export HOME="/home/chenqinghui"
+export LC_ALL="en_US.UTF-8"
+export LOGNAME="chenqinghui"
+export PATH="/home/chenqinghui/bitbake/bin/:/home/chenqinghui/bin:/home/chenqinghui/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/chenqinghui/bbTutorial/meta-two"
+export SHELL="/bin/bash"
+export TERM="xterm"
+export USER="chenqinghui"
+
+do_build() {
+	echo "first:some shell script running as build"
+}
+
+cd '/home/chenqinghui/bbTutorial/build'
+do_build
+
+# cleanup
+ret=$?
+trap '' 0
+exit $ret
